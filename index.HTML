@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ejercicios · Figuras planas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fdf8ef; --card:#ffffff; --ink:#1f2a44; --muted:#5b6478; --line:#e7dfcf;
+    --azul:#2f7de1; --azul-s:#e6f0fd; --verde:#1fa463; --verde-s:#e3f6ec;
+    --rojo:#e0483e; --rojo-s:#fde8e6; --amarillo:#f5b301; --amarillo-s:#fff5d6;
+    --morado:#8a4fd8; --morado-s:#f1e9fc; --naranja:#f07b1d; --naranja-s:#fdeedd;
+    --sombra:0 4px 0 rgba(31,42,68,.08), 0 10px 24px rgba(31,42,68,.06);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:18px;line-height:1.55}
+  .wrap{max-width:900px;margin:0 auto;padding:0 16px 80px}
+
+  .top{position:sticky;top:0;z-index:20;background:rgba(253,248,239,.95);backdrop-filter:blur(6px);border-bottom:2px solid var(--line)}
+  .top-in{max-width:900px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .top b{font-weight:900}
+  .barra{flex:1;min-width:140px;height:14px;background:#efe6d3;border-radius:99px;overflow:hidden}
+  .barra i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--verde),#4cc98a);border-radius:99px;transition:width .4s}
+  .estrellas{font-weight:800;white-space:nowrap}
+  nav.menu{max-width:900px;margin:0 auto;padding:0 16px 10px;display:flex;gap:8px;overflow-x:auto}
+  nav.menu a{flex:none;text-decoration:none;color:var(--ink);background:#fff;border:2px solid var(--line);padding:4px 12px;border-radius:99px;font-weight:700;font-size:15px}
+  nav.menu a:hover{border-color:var(--azul)}
+
+  header.hero{padding:30px 0 6px;text-align:center}
+  .chip{display:inline-block;background:var(--amarillo-s);color:#8a6400;border:2px solid #f3d27a;font-weight:800;padding:4px 14px;border-radius:99px;font-size:15px}
+  h1{font-size:clamp(28px,6vw,42px);line-height:1.1;margin:14px 0 8px;font-weight:900}
+  .hero p{color:var(--muted);max-width:620px;margin:0 auto}
+
+  section.tema{background:var(--card);border-radius:24px;padding:24px 20px;margin:26px 0;box-shadow:var(--sombra);border-top:8px solid var(--c,var(--azul));scroll-margin-top:110px}
+  .tema h2{margin:0 0 10px;font-size:clamp(23px,4.5vw,30px);font-weight:900;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .tema h2 .n{display:inline-grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--c);color:#fff;font-size:22px;flex:none}
+  .tema h2 .cnt{margin-left:auto;font-size:15px;font-weight:800;background:var(--cs);color:var(--ink);padding:3px 12px;border-radius:99px}
+  .tema h3{font-size:20px;margin:22px 0 6px;font-weight:800}
+  .tema h3::before{content:"✏️ "}
+
+  /* Mini resumen */
+  .resumen{background:var(--cs);border-radius:18px;padding:14px 16px;border-left:6px solid var(--c)}
+  .resumen .rt{font-weight:900;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--c);margin-bottom:4px}
+  .resumen ul{margin:4px 0 0;padding-left:20px}
+  .resumen li{margin:2px 0}
+  .mini{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));margin:10px 0 2px}
+  .mini div{background:#fff;border-radius:12px;padding:6px 8px;text-align:center;font-size:14.5px;line-height:1.3}
+  .mini svg{width:100%;max-width:130px;height:auto;display:block;margin:0 auto 2px}
+  .mini b{display:block;font-size:15.5px}
+
+  /* Ejercicios */
+  .q{border:2px solid var(--line);border-radius:18px;padding:14px 16px;margin:12px 0;background:#fff;transition:border-color .2s, background .2s}
+  .q .enun{font-weight:700;margin-bottom:8px}
+  .q .enun .num{display:inline-grid;place-items:center;min-width:28px;height:28px;border-radius:8px;background:var(--c);color:#fff;font-weight:900;font-size:15px;margin-right:6px;padding:0 6px}
+  .q svg.fig{width:100%;max-width:240px;height:auto;display:block;margin:6px auto 10px}
+  .q svg.fig.reloj{max-width:150px}
+  .ops{display:flex;flex-wrap:wrap;gap:8px}
+  .op{font:inherit;font-weight:700;font-size:16.5px;border:2px solid #d9d0bd;background:#fff;color:var(--ink);padding:8px 14px;border-radius:12px;cursor:pointer;transition:transform .08s, background .2s}
+  .op:hover{border-color:var(--azul);background:var(--azul-s)}
+  .op:active{transform:scale(.97)}
+  .op.mal{background:var(--rojo-s);border-color:var(--rojo);color:#9b2018;animation:sacude .35s}
+  .op.bien{background:var(--verde-s);border-color:var(--verde);color:#0f6b3e}
+  .numfila{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .numfila input{font:inherit;font-weight:800;width:110px;padding:8px 10px;border:2px solid #d9d0bd;border-radius:12px;font-size:18px}
+  .numfila input:focus{outline:none;border-color:var(--azul)}
+  .revisar{font:inherit;font-weight:800;background:var(--azul);color:#fff;border:0;padding:9px 16px;border-radius:12px;cursor:pointer}
+  .fb{margin-top:10px;font-size:16.5px;border-radius:12px;padding:0;max-height:0;overflow:hidden;transition:all .25s}
+  .fb.on{padding:10px 12px;max-height:400px}
+  .fb.ok{background:var(--verde-s);color:#0f5a35}
+  .fb.no{background:var(--rojo-s);color:#8c1f17}
+  .q.hecha{border-color:var(--verde);background:#fbfffc}
+  .q.hecha .op:not(.bien){opacity:.55;pointer-events:none}
+  @keyframes sacude{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+  /* Explorador de ángulos */
+  .explora{--tc:#1fa463;display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:center;background:#fffaf3;border-radius:18px;padding:16px;margin:12px 0 4px;border:3px solid var(--tc);transition:border-color .3s}
+  .explora svg{width:100%;margin:auto;display:block;background:#fff;border-radius:14px;touch-action:none;cursor:grab;user-select:none}
+  .explora svg:active{cursor:grabbing}
+  .explora .mano{text-align:center;font-size:14.5px;color:var(--muted);margin-top:6px;font-weight:700}
+  .explora input[type=range]{width:100%;accent-color:var(--tc);height:28px}
+  .explora .grande{font-size:48px;font-weight:900;line-height:1}
+  .explora .nombre{font-size:26px;font-weight:900;color:var(--tc);transition:color .3s}
+  .saltos{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .saltos button{font:inherit;font-size:14.5px;font-weight:800;border:2px solid #d9d0bd;background:#fff;border-radius:10px;padding:5px 10px;cursor:pointer}
+  .saltos button.activo{background:var(--tc);border-color:var(--tc);color:#fff}
+  .explica{grid-column:1 / -1;background:#fff;border-radius:14px;padding:12px 16px;border-left:6px solid var(--tc);font-size:17px}
+  .explica h4{margin:0 0 4px;font-size:19px;color:var(--tc)}
+  .explica p{margin:4px 0}
+  .explica .medidor{display:flex;height:16px;border-radius:99px;overflow:hidden;margin:8px 0 2px;background:#eee}
+  .explica .medidor i{display:block;height:100%}
+  .explica .marcas{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);font-weight:700}
+  @media (max-width:620px){.explora{grid-template-columns:1fr}}
+
+  .final{text-align:center;padding:26px 16px;border-radius:24px;background:linear-gradient(135deg,#fff5d6,#e3f6ec);margin-top:26px;box-shadow:var(--sombra)}
+  .final .big{font-size:56px}
+  .reset{font:inherit;font-weight:700;background:transparent;border:2px solid var(--line);border-radius:12px;padding:6px 14px;cursor:pointer;color:var(--muted);margin-top:10px}
+  .confeti{position:fixed;top:-20px;font-size:26px;pointer-events:none;z-index:50;animation:cae 1.8s linear forwards}
+  @keyframes cae{to{transform:translateY(105vh) rotate(540deg);opacity:.2}}
+  @media print{.top,nav.menu,.reset{display:none} section.tema{box-shadow:none}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <marker id="fl" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10z" fill="#2f7de1"/></marker>
+</defs></svg>
+
+<div class="top">
+  <div class="top-in">
+    <b>✏️ Ejercicios</b>
+    <div class="barra" aria-label="Progreso"><i id="barra"></i></div>
+    <span class="estrellas">⭐ <span id="cuenta">0</span>/<span id="total">0</span></span>
+  </div>
+  <nav class="menu">
+    <a href="#rectas">1 · Rectas</a>
+    <a href="#angulos">2 · Ángulos</a>
+    <a href="#poligonos">3 · Polígonos</a>
+    <a href="#triangulos">4 · Triángulos</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+<header class="hero">
+  <span class="chip">Geometría · Solo ejercicios</span>
+  <h1>¡A practicar!<br>Rectas, ángulos, polígonos y triángulos</h1>
+  <p>Cada unidad parte con un mini resumen para recordar. Después vienen los ejercicios: si te equivocas, aparece una pista y puedes volver a intentarlo. ¡Cada respuesta correcta es una estrella!</p>
+</header>
+
+<!-- 1. RECTAS -->
+<section class="tema" id="rectas" style="--c:var(--azul);--cs:var(--azul-s)">
+  <h2><span class="n">1</span> Las rectas <span class="cnt" data-cnt="rectas"></span></h2>
+  <div class="resumen">
+    <div class="rt">Mini resumen</div>
+    Dos rectas pueden ser:
+    <div class="mini">
+      <div><svg viewBox="0 0 140 80"><line x1="10" y1="25" x2="130" y2="25" stroke="#2f7de1" stroke-width="4"/><line x1="10" y1="58" x2="130" y2="58" stroke="#2f7de1" stroke-width="4"/></svg><b>Paralelas //</b>Nunca se cruzan.</div>
+      <div><svg viewBox="0 0 140 80"><line x1="10" y1="45" x2="130" y2="45" stroke="#2f7de1" stroke-width="4"/><line x1="70" y1="5" x2="70" y2="78" stroke="#e0483e" stroke-width="4"/><rect x="70" y="32" width="13" height="13" fill="none" stroke="#1f2a44" stroke-width="2.5"/></svg><b>Perpendiculares ⊥</b>Se cruzan en 90° (cuadradito).</div>
+      <div><svg viewBox="0 0 140 80"><line x1="10" y1="70" x2="130" y2="15" stroke="#2f7de1" stroke-width="4"/><line x1="10" y1="15" x2="130" y2="72" stroke="#e0483e" stroke-width="4"/></svg><b>Oblicuas</b>Se cruzan chuecas, como una X.</div>
+    </div>
+  </div>
+  <h3>Ejercicios</h3>
+  <div class="lista" data-u="rectas"></div>
+</section>
+
+<!-- 2. ÁNGULOS -->
+<section class="tema" id="angulos" style="--c:var(--naranja);--cs:var(--naranja-s)">
+  <h2><span class="n">2</span> Los ángulos <span class="cnt" data-cnt="angulos"></span></h2>
+  <div class="resumen">
+    <div class="rt">Mini resumen</div>
+    <ul>
+      <li>Un ángulo es la <b>abertura</b> entre dos líneas que salen del mismo punto (el <b>vértice</b>). Se mide en <b>grados (°)</b> con el <b>transportador</b>.</li>
+      <li><b>Agudo</b>: menos de 90° · <b>Recto</b>: 90° justos · <b>Obtuso</b>: entre 90° y 180° · <b>Extendido</b>: 180°.</li>
+    </ul>
+    <div class="explora" id="explora">
+      <div class="explora-fig">
+        <svg id="exploraSvg" viewBox="0 0 260 150" aria-label="Ángulo que se puede mover"></svg>
+        <div class="mano">👆 Arrastra el punto grande para abrir o cerrar el ángulo</div>
+      </div>
+      <div>
+        <div class="grande"><span id="exploraGrados">45</span>°</div>
+        <div class="nombre" id="exploraNombre">Ángulo agudo</div>
+        <input type="range" id="exploraRango" min="1" max="180" value="45" step="1" aria-label="Grados del ángulo">
+        <div class="saltos">
+          <button data-g="40">Agudo</button><button data-g="90">Recto</button><button data-g="135">Obtuso</button><button data-g="180">Extendido</button>
+        </div>
+      </div>
+      <div class="explica" id="exploraTexto"></div>
+    </div>
+  </div>
+  <h3>Ejercicios</h3>
+  <div class="lista" data-u="angulos"></div>
+</section>
+
+<!-- 3. POLÍGONOS -->
+<section class="tema" id="poligonos" style="--c:var(--morado);--cs:var(--morado-s)">
+  <h2><span class="n">3</span> Los polígonos <span class="cnt" data-cnt="poligonos"></span></h2>
+  <div class="resumen">
+    <div class="rt">Mini resumen</div>
+    <ul>
+      <li>Polígono = figura <b>cerrada</b> hecha solo con <b>lados rectos</b> (el círculo NO es polígono).</li>
+      <li>Siempre: <b>lados = vértices = ángulos</b>. Una <b>diagonal</b> une dos esquinas que no están al lado.</li>
+    </ul>
+    <div class="mini" id="miniPoligonos"></div>
+  </div>
+  <h3>Ejercicios</h3>
+  <div class="lista" data-u="poligonos"></div>
+</section>
+
+<!-- 4. TRIÁNGULOS -->
+<section class="tema" id="triangulos" style="--c:var(--rojo);--cs:var(--rojo-s)">
+  <h2><span class="n">4</span> Los triángulos <span class="cnt" data-cnt="triangulos"></span></h2>
+  <div class="resumen">
+    <div class="rt">Mini resumen</div>
+    <ul>
+      <li><b>Por sus lados:</b> equilátero (3 iguales) · isósceles (2 iguales) · escaleno (todos distintos).</li>
+      <li><b>Por sus ángulos:</b> acutángulo (3 agudos) · rectángulo (1 recto) · obtusángulo (1 obtuso).</li>
+      <li>Los 3 ángulos <b>siempre suman 180°</b>. Para el que falta: sumo los dos que sé y se lo resto a 180.</li>
+    </ul>
+    <div class="mini">
+      <div><svg viewBox="0 0 140 100"><polygon points="70,10 125,92 15,92" fill="#fde8e6" stroke="#e0483e" stroke-width="3"/><g stroke="#1f2a44" stroke-width="2.5"><line x1="37" y1="48" x2="46" y2="54"/><line x1="94" y1="54" x2="103" y2="48"/><line x1="70" y1="86" x2="70" y2="98"/></g></svg><b>Equilátero</b></div>
+      <div><svg viewBox="0 0 140 100"><polygon points="70,8 100,92 40,92" fill="#fde8e6" stroke="#e0483e" stroke-width="3"/><g stroke="#1f2a44" stroke-width="2.5"><line x1="49" y1="52" x2="58" y2="48"/><line x1="82" y1="48" x2="91" y2="52"/></g></svg><b>Isósceles</b></div>
+      <div><svg viewBox="0 0 140 100"><polygon points="45,15 130,92 10,92" fill="#fde8e6" stroke="#e0483e" stroke-width="3"/></svg><b>Escaleno</b></div>
+      <div><svg viewBox="0 0 140 100"><polygon points="25,12 25,92 125,92" fill="#fff5d6" stroke="#f5b301" stroke-width="3"/><rect x="25" y="80" width="12" height="12" fill="none" stroke="#1f2a44" stroke-width="2"/></svg><b>Rectángulo</b>1 ángulo de 90°</div>
+    </div>
+  </div>
+  <h3>Ejercicios</h3>
+  <div class="lista" data-u="triangulos"></div>
+</section>
+
+<div class="final" id="final">
+  <div class="big">🌟</div>
+  <h2 style="margin:6px 0">Llevas <span id="cuenta2">0</span> de <span id="total2">0</span> estrellas</h2>
+  <p id="mensajeFinal" style="margin:0;color:var(--muted)">Responde todos los ejercicios para completar.</p>
+  <button class="reset" id="reiniciar">Empezar de nuevo</button>
+</div>
+
+</div>
+
+<script>
+(function(){
+  // ---------- Ayudas para dibujar ----------
+  function S(vb, inner, cls){ return '<svg class="fig' + (cls ? ' ' + cls : '') + '" viewBox="' + vb + '">' + inner + '</svg>'; }
+  function L(x1,y1,x2,y2,c,w,extra){ return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(c||"#2f7de1")+'" stroke-width="'+(w||4)+'" stroke-linecap="round"'+(extra||'')+'/>'; }
+  function T(x,y,t,c,s,anchor){ return '<text x="'+x+'" y="'+y+'" font-size="'+(s||15)+'" font-weight="800" fill="'+(c||"#1f2a44")+'"'+(anchor?' text-anchor="'+anchor+'"':'')+'>'+t+'</text>'; }
+  function cuadrito(x,y,s){ s = s||18; return '<rect x="'+x+'" y="'+y+'" width="'+s+'" height="'+s+'" fill="none" stroke="#1f2a44" stroke-width="2.5"/>'; }
+  function tri(pts, extra, fill, stroke){ return '<polygon points="'+pts+'" fill="'+(fill||"#fde8e6")+'" stroke="'+(stroke||"#e0483e")+'" stroke-width="4" stroke-linejoin="round"/>' + (extra||''); }
+  var FL = ' marker-start="url(#fl)" marker-end="url(#fl)"';
+
+  function angulo(g, et){
+    var vx = 110, vy = 125, Lr = 92, r = 30, rad = g*Math.PI/180;
+    var x2 = vx + Lr*Math.cos(rad), y2 = vy - Lr*Math.sin(rad), ax = vx + r*Math.cos(rad), ay = vy - r*Math.sin(rad);
+    var h = g === 90
+      ? '<rect x="'+vx+'" y="'+(vy-18)+'" width="18" height="18" fill="#fdeedd" stroke="#f07b1d" stroke-width="3"/>'
+      : '<path d="M'+(vx+r)+' '+vy+' A'+r+' '+r+' 0 0 0 '+ax.toFixed(1)+' '+ay.toFixed(1)+' L'+vx+' '+vy+'Z" fill="#fdeedd" stroke="#f07b1d" stroke-width="3"/>';
+    h += L(vx,vy,vx+Lr,vy,"#1f2a44",5) + L(vx,vy,x2.toFixed(1),y2.toFixed(1),"#1f2a44",5) + '<circle cx="'+vx+'" cy="'+vy+'" r="6" fill="#e0483e"/>';
+    if (et){ var a = (g/2)*Math.PI/180; h += T((vx+50*Math.cos(a)).toFixed(1), (vy-50*Math.sin(a)+5).toFixed(1), et, "#f07b1d", 17, "middle"); }
+    return S("0 0 220 150", h);
+  }
+  function reloj(hh){
+    var cx = 80, cy = 80, h = '<circle cx="80" cy="80" r="70" fill="#fff" stroke="#1f2a44" stroke-width="5"/>';
+    for (var i=1;i<=12;i++){
+      var a = i*30*Math.PI/180;
+      h += L((cx+60*Math.sin(a)).toFixed(1),(cy-60*Math.cos(a)).toFixed(1),(cx+66*Math.sin(a)).toFixed(1),(cy-66*Math.cos(a)).toFixed(1),"#1f2a44",i%3===0?4:2);
+      if (i%3===0) h += T((cx+48*Math.sin(a)).toFixed(1),(cy-48*Math.cos(a)+6).toFixed(1),i,"#1f2a44",16,"middle");
+    }
+    var ah = (hh%12)*30*Math.PI/180;
+    h += L(80,80,80,24,"#2f7de1",5) + L(80,80,(cx+40*Math.sin(ah)).toFixed(1),(cy-40*Math.cos(ah)).toFixed(1),"#e0483e",7) + '<circle cx="80" cy="80" r="6" fill="#1f2a44"/>';
+    return S("0 0 160 160", h, "reloj");
+  }
+  function puntos(n, cx, cy, R){
+    var ini = -90 + (n % 2 === 0 ? 180/n : 0), p = [];
+    for (var i=0;i<n;i++){ var a=(ini + i*360/n)*Math.PI/180; p.push([+(cx+R*Math.cos(a)).toFixed(1), +(cy+R*Math.sin(a)).toFixed(1)]); }
+    return p;
+  }
+  function poligono(n, color, conPuntos, extra){
+    var p = puntos(n,110,82,68); color = color || "#8a4fd8";
+    var h = '<polygon points="'+p.map(function(q){return q.join(",");}).join(" ")+'" fill="'+color+'22" stroke="'+color+'" stroke-width="4" stroke-linejoin="round"/>';
+    if (conPuntos) p.forEach(function(q){ h += '<circle cx="'+q[0]+'" cy="'+q[1]+'" r="6" fill="#e0483e"/>'; });
+    return S("0 0 220 160", h + (extra||''));
+  }
+
+  // ---------- Opciones ----------
+  var OR = ["Paralelas","Perpendiculares","Oblicuas"];
+  var OA = ["Agudo","Recto","Obtuso","Extendido"];
+  var SN = ["Sí","No"], VF = ["Verdadero","Falso"];
+  var TL = ["Equilátero","Isósceles","Escaleno"];
+  var TA = ["Acutángulo","Rectángulo","Obtusángulo"];
+
+  var cruz = L(15,65,205,65) + L(110,8,110,122,"#e0483e") + cuadrito(110,47);
+  var paralelasFl = L(15,30,225,30,"#2f7de1",4,FL) + L(15,80,225,80,"#2f7de1",4,FL);
+
+  // ---------- Ejercicios por unidad ----------
+  var U = {};
+
+  U.rectas = [
+    {e:"¿Cómo son estas rectas?", f:S("0 0 220 110", L(20,25,200,55)+L(20,65,200,95,"#e0483e")), o:OR, a:"Paralelas",
+     ok:"¡Muy bien! Van inclinadas, pero nunca se tocan: son paralelas.", h:"Aunque estén inclinadas, ¿se llegan a tocar?"},
+    {e:"¿Cómo son estas rectas?", f:S("0 0 220 130", cruz), o:OR, a:"Perpendiculares",
+     ok:"¡Exacto! Forman una cruz con ángulo recto (el cuadradito).", h:"Busca el cuadradito en el cruce."},
+    {e:"¿Cómo son estas rectas?", f:S("0 0 220 110", L(15,95,205,35)+L(15,20,205,100,"#e0483e")), o:OR, a:"Oblicuas",
+     ok:"¡Bien! Se cruzan, pero chuecas: son oblicuas.", h:"Se cruzan… ¿forman una cruz derechita o una X?"},
+    {e:"¿Cómo son estas rectas?", f:S("0 0 220 130", L(80,10,80,120)+L(140,10,140,120,"#e0483e")), o:OR, a:"Paralelas",
+     ok:"¡Correcto! Están paradas, una al lado de la otra, y nunca se juntan.", h:"¿Se tocan en algún lugar?"},
+    {e:"¿Cómo son estas rectas?", f:S("0 0 220 130", L(40,20,180,110)+L(146,9,74,121,"#e0483e")+'<polygon points="110,65 123.5,73.7 114.8,87.1 101.4,78.5" fill="none" stroke="#1f2a44" stroke-width="2.5"/>'), o:OR, a:"Perpendiculares",
+     ok:"¡Muy bien! Aunque estén giradas, el cuadradito dice 90°: perpendiculares.", h:"Están giradas… pero mira qué hay en el cruce."},
+    {e:"¿Cómo son estas rectas?", f:S("0 0 220 120", L(10,40,210,95)+L(10,95,210,45,"#e0483e")), o:OR, a:"Oblicuas",
+     ok:"¡Bien! Se cruzan formando una X aplastada: oblicuas.", h:"¿Se cruzan? Si se cruzan, ¿hay ángulo recto?"},
+    {e:"Los dos rieles de la vía del tren son rectas…", f:S("0 0 240 110", '<g fill="#a0703c"><rect x="22" y="22" width="12" height="66" rx="2"/><rect x="50" y="22" width="12" height="66" rx="2"/><rect x="78" y="22" width="12" height="66" rx="2"/><rect x="106" y="22" width="12" height="66" rx="2"/><rect x="134" y="22" width="12" height="66" rx="2"/><rect x="162" y="22" width="12" height="66" rx="2"/><rect x="190" y="22" width="12" height="66" rx="2"/></g>'+L(8,36,232,36,"#5b6478",7)+L(8,74,232,74,"#5b6478",7)), o:OR, a:"Paralelas",
+     ok:"¡Sí! Si los rieles se juntaran, el tren se caería.", h:"¿Los rieles se tocan alguna vez?"},
+    {e:"El borde de arriba y el borde del costado de una hoja son…", f:S("0 0 240 150", '<rect x="60" y="15" width="120" height="125" fill="#fff" stroke="#cfd6e3" stroke-width="2"/>'+L(58,15,182,15,"#2f7de1",6)+L(60,13,60,142,"#e0483e",6)+cuadrito(60,15,16)), o:OR, a:"Perpendiculares",
+     ok:"¡Correcto! La esquina de la hoja es un ángulo recto.", h:"¿Qué ángulo tiene la esquina de una hoja?"},
+    {e:"Las dos hojas de una tijera abierta son…", f:S("0 0 240 140", L(215,25,78,90,"#8b95a8",9)+L(215,115,78,50,"#aeb6c5",9)+'<circle cx="58" cy="100" r="17" fill="none" stroke="#f07b1d" stroke-width="7"/><circle cx="58" cy="40" r="17" fill="none" stroke="#f07b1d" stroke-width="7"/><circle cx="130" cy="70" r="5" fill="#1f2a44"/>'), o:OR, a:"Oblicuas",
+     ok:"¡Bien! Se cruzan como una X chueca.", h:"Se cruzan… ¿con ángulo recto o chuecas?"},
+    {e:"Los renglones de una hoja de cuaderno son…", f:S("0 0 240 150", '<rect x="40" y="10" width="160" height="130" fill="#fff" stroke="#cfd6e3" stroke-width="2"/>'+L(40,35,200,35,"#2f7de1",3)+L(40,58,200,58,"#2f7de1",3)+L(40,81,200,81,"#2f7de1",3)+L(40,104,200,104,"#2f7de1",3)+L(40,127,200,127,"#2f7de1",3)), o:OR, a:"Paralelas",
+     ok:"¡Exacto! Los renglones están siempre a la misma distancia y nunca se juntan.", h:"¿Algún renglón choca con otro?"},
+    {e:"Las dos rayas de la letra T son…", f:S("0 0 220 150", L(40,30,180,30,"#2f7de1",8)+L(110,30,110,140,"#e0483e",8)+cuadrito(114,34,14)), o:OR, a:"Perpendiculares",
+     ok:"¡Muy bien! La raya de abajo cae derechita: forma 90°.", h:"¿La raya de abajo está derechita o chueca?"},
+    {e:"Las dos rayas de esta X son…", f:S("0 0 220 150", L(30,30,190,120,"#2f7de1",7)+L(190,30,30,120,"#e0483e",7)), o:OR, a:"Oblicuas",
+     ok:"¡Correcto! Se cruzan, pero sin ángulo recto: oblicuas.", h:"¿Ves un cuadradito o una esquina recta en el cruce?"},
+    {e:"Verdadero o falso: «Dos rectas perpendiculares forman 4 ángulos rectos».", f:S("0 0 220 130", L(15,65,205,65)+L(110,8,110,122,"#e0483e")+cuadrito(110,47)+cuadrito(92,47)+cuadrito(92,65)+cuadrito(110,65)), o:VF, a:"Verdadero",
+     ok:"¡Bien! Al cruzarse como un + se forman 4 esquinas de 90°.", h:"Cuenta los cuadraditos del dibujo."},
+    {e:"Verdadero o falso: «Dos rectas paralelas se cortan en un punto».", f:S("0 0 240 110", paralelasFl + T(120,63,"¿?","#e0483e",22,"middle")), o:VF, a:"Falso",
+     ok:"¡Muy bien! Es FALSO: las paralelas nunca se cortan.", h:"Recuerda qué significa ser paralelas."},
+    {e:"Cuando dos rectas perpendiculares se cruzan, ¿cuántos ángulos rectos se forman?", f:S("0 0 220 130", cruz), n:1, a:"4",
+     ok:"¡Correcto! Se forman 4 ángulos rectos, uno en cada esquina del +.", h:"Mira las 4 esquinas que se forman alrededor del cruce."},
+    {e:"L₂ y L₃ son perpendiculares a L₁. ¿Cómo son L₂ y L₃ entre ellas?", f:S("0 0 220 150", L(15,110,205,110)+L(70,15,70,140,"#e0483e")+L(150,15,150,140,"#e0483e")+cuadrito(70,92)+cuadrito(150,92)+T(185,103,"L₁","#2f7de1")+T(76,30,"L₂","#e0483e")+T(156,30,"L₃","#e0483e")), o:OR, a:"Paralelas",
+     ok:"¡Excelente! Las dos cortan a L₁ igual (90°), así que van en la misma dirección: paralelas.", h:"Mira L₂ y L₃: ¿se van a juntar alguna vez?"},
+    {e:"¿Qué significa el símbolo ⊥?", f:S("0 0 220 110", T(110,90,"⊥","#2f7de1",90,"middle")), o:OR, a:"Perpendiculares",
+     ok:"¡Bien! ⊥ se lee «es perpendicular a». El de paralelas es //.", h:"Mira la forma del símbolo: una raya parada sobre una acostada."}
+  ];
+
+  U.angulos = [
+    {e:"Un ángulo de 30° es…", f:angulo(30,"30°"), o:OA, a:"Agudo", ok:"¡Bien! 30 es menos que 90: agudo.", h:"¿30 es más o menos que 90?"},
+    {e:"Un ángulo de 150° es…", f:angulo(150,"150°"), o:OA, a:"Obtuso", ok:"¡Correcto! 150 está entre 90 y 180: obtuso.", h:"Compara 150 con 90 y con 180."},
+    {e:"Un ángulo de 90° es…", f:angulo(90,"90°"), o:OA, a:"Recto", ok:"¡Exacto! 90° justos: recto (por eso tiene cuadradito).", h:"¿Qué ángulo se marca con un cuadradito?"},
+    {e:"Un ángulo de 180° es…", f:angulo(180,"180°"), o:OA, a:"Extendido", ok:"¡Muy bien! 180° parece una línea recta: extendido.", h:"Las dos líneas quedaron formando una sola línea."},
+    {e:"¿Qué tipo de ángulo es este?", f:angulo(70), o:OA, a:"Agudo", ok:"¡Bien! Es más cerrado que una esquina: agudo.", h:"Compáralo con la esquina de una hoja."},
+    {e:"¿Qué tipo de ángulo es este?", f:angulo(115), o:OA, a:"Obtuso", ok:"¡Correcto! Es más abierto que una esquina: obtuso.", h:"¿Es más abierto o más cerrado que la esquina de un cuaderno?"},
+    {e:"A las 3:00, las manecillas del reloj forman un ángulo…", f:reloj(3), o:OA, a:"Recto", ok:"¡Sí! Del 12 al 3 hay un cuarto de vuelta: 90°.", h:"Una manecilla en el 12 y otra en el 3: ¿forman una esquina?"},
+    {e:"A las 6:00, las manecillas del reloj forman un ángulo…", f:reloj(6), o:OA, a:"Extendido", ok:"¡Exacto! Forman una línea recta: 180°.", h:"Una en el 12 y otra en el 6: ¿qué forma hacen?"},
+    {e:"A la 1:00, las manecillas del reloj forman un ángulo…", f:reloj(1), o:OA, a:"Agudo", ok:"¡Bien! Están muy juntitas: agudo (30°).", h:"¿Están más juntas o más separadas que a las 3:00?"},
+    {e:"A las 5:00, las manecillas del reloj forman un ángulo…", f:reloj(5), o:OA, a:"Obtuso", ok:"¡Muy bien! Más abierto que a las 3:00, pero sin llegar a las 6:00: obtuso.", h:"Está entre las 3:00 (recto) y las 6:00 (extendido)."},
+    {e:"Un ángulo de 89° es… (¡ojo!)", f:angulo(89,"89°"), o:OA, a:"Agudo", ok:"¡Bien atento! 89 no alcanza a llegar a 90: es agudo.", h:"Mira el número con cuidado: ¿llega a 90?"},
+    {e:"Un ángulo de 91° es… (¡ojo!)", f:angulo(91,"91°"), o:OA, a:"Obtuso", ok:"¡Muy bien! 91 se pasó de 90: es obtuso.", h:"¿91 es más o menos que 90?"},
+    {e:"¿Cuántos grados mide un ángulo extendido?", f:angulo(180,"? °"), n:1, u:"°", a:"180", ok:"¡Correcto! El extendido mide 180°.", h:"Es media vuelta: dos ángulos rectos juntos."},
+    {e:"Un ángulo mide 60°. ¿Cuántos grados le faltan para ser recto?", f:angulo(60,"60°"), n:1, u:"°", a:"30", ok:"¡Exacto! 90 − 60 = 30°.", h:"El recto mide 90. Haz 90 − 60."},
+    {e:"Si juntas dos ángulos rectos, ¿cuántos grados tienes en total?", f:S("0 0 220 140", L(15,115,205,115,"#1f2a44",5)+L(110,115,110,20,"#1f2a44",5)+'<rect x="110" y="97" width="18" height="18" fill="#fdeedd" stroke="#f07b1d" stroke-width="3"/><rect x="92" y="97" width="18" height="18" fill="#fdeedd" stroke="#f07b1d" stroke-width="3"/>'+T(150,80,"90°","#f07b1d",17)+T(45,80,"90°","#f07b1d",17)), n:1, u:"°", a:"180", ok:"¡Muy bien! 90 + 90 = 180°: un ángulo extendido.", h:"Suma 90 + 90."},
+    {e:"¿Con qué instrumento se miden los ángulos?", f:S("0 0 220 130", '<path d="M20 115 A90 90 0 0 1 200 115 Z" fill="#fff5d6" stroke="#f5b301" stroke-width="4"/><path d="M80 115 A30 30 0 0 1 140 115" fill="none" stroke="#f5b301" stroke-width="3"/>'+L(110,115,110,30,"#d9a400",2)+L(110,115,48,52,"#d9a400",2)+L(110,115,172,52,"#d9a400",2)), o:["Regla","Transportador","Compás"], a:"Transportador", ok:"¡Correcto! El transportador mide los grados de un ángulo.", h:"Es el instrumento con forma de medio círculo."},
+    {e:"¿Cómo se llama el punto rojo, donde se juntan las dos líneas del ángulo?", f:S("0 0 220 150", L(110,125,202,125,"#1f2a44",5)+L(110,125,160,48,"#1f2a44",5)+'<circle cx="110" cy="125" r="9" fill="#e0483e"/>'+T(48,130,"¿?","#e0483e",22)), o:["Lado","Vértice","Diagonal"], a:"Vértice", ok:"¡Bien! Ese punto se llama vértice.", h:"Es la misma palabra que usamos para las «esquinas» de un polígono."},
+    {e:"Verdadero o falso: «Un ángulo obtuso es más pequeño que un ángulo recto».", f:angulo(135), o:VF, a:"Falso", ok:"¡Muy bien! Es FALSO: el obtuso es MÁS abierto (más grande) que el recto.", h:"Usa el ángulo que se mueve, arriba: ¿el obtuso está antes o después del 90?"}
+  ];
+
+  var pent = puntos(5,110,82,68);
+  U.poligonos = [
+    {e:"¿Cómo se llama este polígono?", f:poligono(3,"#e0483e"), o:["Triángulo","Cuadrilátero","Pentágono"], a:"Triángulo", ok:"¡Bien! 3 lados: triángulo.", h:"Cuenta los lados con el dedo."},
+    {e:"¿Cómo se llama este polígono?", f:poligono(4,"#2f7de1"), o:["Triángulo","Cuadrilátero","Pentágono"], a:"Cuadrilátero", ok:"¡Correcto! 4 lados: cuadrilátero.", h:"Cuenta los lados. «Cuadri» = 4."},
+    {e:"¿Cómo se llama este polígono?", f:poligono(5,"#1fa463"), o:["Cuadrilátero","Pentágono","Hexágono"], a:"Pentágono", ok:"¡Muy bien! 5 lados: pentágono.", h:"Cuenta los lados. «Penta» = 5."},
+    {e:"¿Cómo se llama este polígono?", f:poligono(6,"#f07b1d"), o:["Pentágono","Hexágono","Heptágono"], a:"Hexágono", ok:"¡Exacto! 6 lados: hexágono.", h:"Cuenta los lados. «Hexa» = 6."},
+    {e:"¿Cómo se llama este polígono?", f:poligono(7,"#8a4fd8"), o:["Hexágono","Heptágono","Octágono"], a:"Heptágono", ok:"¡Bien! 7 lados: heptágono.", h:"Cuenta con calma y marca el lado donde empezaste. «Hepta» = 7."},
+    {e:"¿Cómo se llama este polígono?", f:poligono(8,"#2f7de1"), o:["Heptágono","Octágono","Hexágono"], a:"Octágono", ok:"¡Correcto! 8 lados: octágono.", h:"Cuenta con calma. «Octo» = 8, como el pulpo de 8 patas."},
+    {e:"¿Cómo se llama este polígono? (sus lados no son iguales)", f:S("0 0 220 160", tri("40,40 150,20 200,90 140,145 30,120","","#f1e9fc","#8a4fd8")), o:["Cuadrilátero","Pentágono","Hexágono"], a:"Pentágono", ok:"¡Muy bien! Aunque sus lados sean distintos, tiene 5: pentágono.", h:"El nombre solo depende de cuántos lados tiene. Cuéntalos."},
+    {e:"La señal PARE tiene forma de…", f:S("0 0 220 160", '<polygon points="'+puntos(8,110,80,70).map(function(q){return q.join(",");}).join(" ")+'" fill="#e0483e" stroke="#fff" stroke-width="5"/>'+T(110,92,"PARE","#fff",32,"middle")), o:["Hexágono","Heptágono","Octágono"], a:"Octágono", ok:"¡Exacto! La señal PARE es un octágono: 8 lados.", h:"Cuenta los lados del borde rojo."},
+    {e:"Cada celda de un panal de abejas tiene forma de…", f:S("0 0 220 160", (function(){ var h=""; [[59,52],[59,110.8],[110,81.4],[161,52],[161,110.8]].forEach(function(c){ h += '<polygon points="'+puntos(6,c[0],c[1],34).map(function(q){return q.join(",");}).join(" ")+'" fill="#ffd25a" stroke="#c98a00" stroke-width="4" stroke-linejoin="round"/>'; }); return h + T(110,91,"🐝","#000",26,"middle"); })()), o:["Pentágono","Hexágono","Octágono"], a:"Hexágono", ok:"¡Bien! Las celdas del panal son hexágonos: 6 lados.", h:"Cuenta los lados de una sola celda."},
+    {e:"¿Cuántos lados tiene un pentágono?", f:poligono(5,"#8a4fd8",0,T(110,90,"?","#e0483e",30,"middle")), n:1, a:"5", ok:"¡Correcto! Pentágono = 5 lados.", h:"«Penta» significa cinco."},
+    {e:"¿Cuántos vértices tiene un octágono?", f:poligono(8,"#8a4fd8",1), n:1, a:"8", ok:"¡Muy bien! Lados = vértices: 8.", h:"Cuenta los puntos rojos (las esquinas)."},
+    {e:"¿Cuántos ángulos tiene un heptágono?", f:poligono(7,"#8a4fd8"), n:1, a:"7", ok:"¡Exacto! Lados = vértices = ángulos: 7.", h:"Un heptágono tiene 7 lados… y tiene tantos ángulos como lados."},
+    {e:"¿Un círculo es un polígono?", f:S("0 0 220 160", '<circle cx="110" cy="80" r="62" fill="#f1e9fc" stroke="#8a4fd8" stroke-width="4"/>'), o:SN, a:"No", ok:"¡Bien! Su borde es curvo, no tiene lados rectos: NO es polígono.", h:"¿El borde del círculo es recto o curvo?"},
+    {e:"¿Esta figura es un polígono?", f:S("0 0 220 160", '<polyline points="40,130 40,40 120,20 190,70 170,140" fill="none" stroke="#8a4fd8" stroke-width="4" stroke-linejoin="round"/>'), o:SN, a:"No", ok:"¡Correcto! Está abierta (no se cierra), así que NO es polígono.", h:"¿La figura está cerrada? Sigue la línea con el dedo."},
+    {e:"¿Esta figura es un polígono?", f:S("0 0 220 150", '<path d="M40 120 A70 70 0 0 1 180 120 Z" fill="#f1e9fc" stroke="#8a4fd8" stroke-width="4"/>'), o:SN, a:"No", ok:"¡Muy bien! Tiene un lado curvo, así que NO es polígono.", h:"Un polígono tiene SOLO lados rectos. ¿Todos los de esta son rectos?"},
+    {e:"¿Cuántas diagonales tiene un cuadrado?", f:S("0 0 220 160", '<rect x="45" y="15" width="130" height="130" fill="#f1e9fc" stroke="#8a4fd8" stroke-width="4"/><g fill="#e0483e"><circle cx="45" cy="15" r="6"/><circle cx="175" cy="15" r="6"/><circle cx="45" cy="145" r="6"/><circle cx="175" cy="145" r="6"/></g>'), n:1, a:"2", ok:"¡Correcto! 2 diagonales, que forman una X.", h:"Une cada esquina con la de enfrente."},
+    {e:"¿Cuántas diagonales tiene un triángulo?", f:poligono(3,"#8a4fd8",1), n:1, a:"0", ok:"¡Excelente! 0 diagonales: todas sus esquinas ya están unidas por lados.", h:"Intenta dibujar una diagonal en un triángulo… ¿se puede?"},
+    {e:"¿Cuántas diagonales salen desde el vértice grande del pentágono?", f:poligono(5,"#8a4fd8",1,'<circle cx="'+pent[0][0]+'" cy="'+pent[0][1]+'" r="11" fill="#1fa463"/>'), n:1, a:"2", ok:"¡Muy bien! Solo puede ir a las 2 esquinas de abajo; a las vecinas ya llega un lado.", h:"Desde esa esquina no cuentan ella misma ni sus 2 vecinas. ¿Cuántas quedan?"},
+    {e:"¿Cuántas diagonales tiene un pentágono en total?", f:poligono(5,"#8a4fd8",1,
+       L(pent[0][0],pent[0][1],pent[2][0],pent[2][1],"#1fa463",3,' stroke-dasharray="6 5"')+L(pent[0][0],pent[0][1],pent[3][0],pent[3][1],"#1fa463",3,' stroke-dasharray="6 5"')), n:1, a:"5", ok:"¡Excelente! 5 diagonales: forman una estrella dentro del pentágono.", h:"Ya hay 2 dibujadas. Sigue desde las otras esquinas sin repetir. Pista: forman una estrella ⭐."}
+  ];
+
+  function t(x,y,s,c){ return T(x,y,s,c||"#1f2a44"); }
+  U.triangulos = [
+    {e:"Un triángulo con lados de 6 cm, 6 cm y 6 cm es…", f:S("0 0 240 180", tri("120,18 198,150 42,150", t(40,85,"6 cm")+t(163,85,"6 cm")+t(102,172,"6 cm"))), o:TL, a:"Equilátero", ok:"¡Bien! Los 3 lados iguales: equilátero.", h:"¿Cuántos lados son iguales?"},
+    {e:"Un triángulo con lados de 7 cm, 7 cm y 4 cm es…", f:S("0 0 240 180", tri("120,15 160,150 80,150", t(48,88,"7 cm")+t(146,88,"7 cm")+t(102,172,"4 cm"))), o:TL, a:"Isósceles", ok:"¡Correcto! Dos lados iguales (7 y 7): isósceles.", h:"¿Cuántos números se repiten?"},
+    {e:"Un triángulo con lados de 4 cm, 6 cm y 8 cm es…", f:S("0 0 240 180", tri("70,40 215,150 25,150", t(6,95,"4 cm")+t(150,88,"6 cm")+t(102,172,"8 cm"))), o:TL, a:"Escaleno", ok:"¡Muy bien! Todos distintos: escaleno.", h:"¿Hay algún lado que se repita?"},
+    {e:"Las rayitas marcan los lados iguales. Este triángulo es…", f:S("0 0 220 170", tri("110,15 160,155 60,155", '<g stroke="#1f2a44" stroke-width="3"><line x1="78" y1="88" x2="91" y2="83"/><line x1="129" y1="83" x2="142" y2="88"/></g>')), o:TL, a:"Isósceles", ok:"¡Exacto! Solo 2 lados tienen rayita: isósceles.", h:"¿Cuántos lados tienen rayita?"},
+    {e:"Las rayitas marcan los lados iguales. Este triángulo es…", f:S("0 0 220 170", tri("110,20 190,150 30,150", '<g stroke="#1f2a44" stroke-width="3"><line x1="64" y1="80" x2="76" y2="88"/><line x1="144" y1="88" x2="156" y2="80"/><line x1="110" y1="143" x2="110" y2="157"/></g>')), o:TL, a:"Equilátero", ok:"¡Bien! Los 3 lados tienen rayita: equilátero.", h:"Cuenta las rayitas."},
+    {e:"Un triángulo con lados de 3 cm, 4 cm y 5 cm es…", f:S("0 0 240 180", tri("40,40 40,150 190,150", t(2,100,"3 cm")+t(100,172,"4 cm")+t(122,88,"5 cm"))), o:TL, a:"Escaleno", ok:"¡Correcto! 3, 4 y 5 son todos distintos: escaleno.", h:"Compara los tres números."},
+    {e:"Según sus ángulos, este triángulo es…", f:S("0 0 220 170", tri("190,30 190,150 30,150", cuadrito(172,132))), o:TA, a:"Rectángulo", ok:"¡Exacto! Tiene un ángulo recto (cuadradito): rectángulo.", h:"Busca el cuadradito."},
+    {e:"Un triángulo tiene ángulos de 60°, 60° y 60°. Según sus ángulos es…", f:S("0 0 240 170", tri("120,20 198,150 42,150", t(64,142,"60°")+t(156,142,"60°")+t(108,62,"60°"),"#fff5d6","#f5b301")), o:TA, a:"Acutángulo", ok:"¡Bien! Los 3 son menores que 90°: acutángulo.", h:"¿Alguno llega a 90 o lo pasa?"},
+    {e:"Un triángulo tiene ángulos de 120°, 30° y 30°. Según sus ángulos es…", f:S("0 0 240 165", tri("120,82 220,140 20,140", T(22,160,"30°","#1f2a44",15,"middle")+T(218,160,"30°","#1f2a44",15,"middle")+T(120,72,"120°","#1f2a44",15,"middle"),"#fff5d6","#f5b301")), o:TA, a:"Obtusángulo", ok:"¡Correcto! 120° es obtuso: obtusángulo.", h:"¿Alguno es mayor que 90°?"},
+    {e:"Un triángulo tiene ángulos de 90°, 45° y 45°. Según sus ángulos es…", f:S("0 0 240 160", tri("120,55 205,140 35,140", '<polygon points="120,55 111.5,63.5 120,72 128.5,63.5" fill="none" stroke="#1f2a44" stroke-width="2.5"/>'+t(62,134,"45°")+t(150,134,"45°")+T(120,96,"90°","#1f2a44",15,"middle"),"#fff5d6","#f5b301")), o:TA, a:"Rectángulo", ok:"¡Muy bien! Tiene uno de 90°: rectángulo.", h:"¿Hay algún ángulo de 90° justos?"},
+    {e:"Un triángulo tiene ángulos de 70°, 60° y 50°. Según sus ángulos es…", f:S("0 0 240 170", tri("88,17 200,150 40,150", t(56,144,"70°")+t(204,160,"50°")+T(96,55,"60°","#1f2a44",15,"middle"),"#fff5d6","#f5b301")), o:TA, a:"Acutángulo", ok:"¡Exacto! Los 3 son agudos: acutángulo.", h:"Revisa uno por uno: ¿alguno llega a 90?"},
+    {e:"Un triángulo rectángulo tiene un ángulo de 40°. ¿Cuánto mide el ángulo que falta?", f:S("0 0 240 170", tri("40,30 40,150 190,150", cuadrito(40,132)+t(62,128,"90°")+t(196,158,"40°")+T(52,70,"?","#e0483e",22))), n:1, u:"°", a:"50", ok:"¡Correcto! 90 + 40 = 130, y 180 − 130 = 50°.", h:"Suma 90 + 40 y réstale eso a 180."},
+    {e:"Un triángulo tiene ángulos de 100° y 50°. ¿Cuánto mide el tercero?", f:S("0 0 240 170", tri("89,80 210,150 30,150", T(20,166,"50°","#1f2a44",15,"middle")+T(89,70,"100°","#1f2a44",15,"middle")+T(222,166,"?","#e0483e",22,"middle"))), n:1, u:"°", a:"30", ok:"¡Muy bien! 100 + 50 = 150, y 180 − 150 = 30°.", h:"Suma 100 + 50 y réstale eso a 180."},
+    {e:"Un triángulo tiene dos ángulos de 60°. ¿Cuánto mide el tercero?", f:S("0 0 240 170", tri("120,20 198,150 42,150", t(64,142,"60°")+t(156,142,"60°")+T(114,62,"?","#e0483e",22))), n:1, u:"°", a:"60", ok:"¡Exacto! 60 + 60 = 120, y 180 − 120 = 60°. ¡Es equilátero!", h:"Suma 60 + 60 y réstale eso a 180."},
+    {e:"Un triángulo tiene ángulos de 35° y 75°. ¿Cuánto mide el tercero?", f:S("0 0 240 170", tri("177,44 205,150 25,150", t(52,144,"35°")+t(208,162,"75°")+T(166,72,"?","#e0483e",22))), n:1, u:"°", a:"70", ok:"¡Excelente! 35 + 75 = 110, y 180 − 110 = 70°.", h:"Suma 35 + 75 y réstale eso a 180."},
+    {e:"En un triángulo equilátero los 3 ángulos miden lo mismo. ¿Cuánto mide cada uno?", f:S("0 0 240 170", tri("120,20 198,150 42,150", '<g font-size="20" font-weight="900" fill="#e0483e"><text x="114" y="56">?</text><text x="64" y="142">?</text><text x="166" y="142">?</text></g>')), n:1, u:"°", a:"60", ok:"¡Muy bien! 180 ÷ 3 = 60°.", h:"Reparte 180 en 3 partes iguales."},
+    {e:"¿Cuántos grados suman los 3 ángulos de cualquier triángulo?", f:S("0 0 240 170", tri("70,20 215,125 25,125", '<circle cx="72" cy="42" r="7" fill="#e0483e"/><circle cx="50" cy="116" r="7" fill="#2f7de1"/><circle cx="185" cy="116" r="7" fill="#1fa463"/>')+T(120,158,"🔴 + 🔵 + 🟢 = ?","#1f2a44",17,"middle")), n:1, u:"°", a:"180", ok:"¡Correcto! Siempre suman 180°. ¡Es la regla de oro!", h:"Es la regla de oro de los triángulos: lo mismo que un ángulo extendido."},
+    {e:"¿Puede un triángulo tener dos ángulos rectos?", f:S("0 0 240 160", L(50,140,190,140,"#e0483e")+L(50,140,50,25,"#e0483e")+L(190,140,190,25,"#e0483e")+cuadrito(50,122)+cuadrito(172,122)+T(120,60,"¿se juntan?","#5b6478",16,"middle")), o:SN, a:"No", ok:"¡Muy bien! 90 + 90 = 180 y no queda nada para el tercero: los lados nunca se juntan.", h:"Recuerda: los 3 ángulos suman 180°."},
+    {e:"¿Puede un triángulo tener dos ángulos obtusos?", f:S("0 0 240 120", T(120,55,"100° + 100° = 200°","#1f2a44",20,"middle")+T(120,90,"¿cabe en 180°?","#e0483e",17,"middle")), o:SN, a:"No", ok:"¡Excelente! Dos obtusos ya pasan de 180°: imposible.", h:"Dos ángulos de más de 90°, sumados, ¿cuánto dan?"},
+    {e:"Verdadero o falso: «Todo triángulo equilátero es también acutángulo».", f:S("0 0 240 170", tri("120,20 198,150 42,150", t(64,142,"60°")+t(156,142,"60°")+t(108,62,"60°"))), o:VF, a:"Verdadero", ok:"¡Bien pensado! Sus 3 ángulos miden 60°, todos agudos: es acutángulo.", h:"¿Cuánto mide cada ángulo de un equilátero? ¿Es agudo?"}
+  ];
+
+  // Mini resumen de polígonos
+  var NOMBRES = {3:"Triángulo",4:"Cuadrilátero",5:"Pentágono",6:"Hexágono",7:"Heptágono",8:"Octágono"}, mh = "";
+  for (var k=3;k<=8;k++){
+    var pp = puntos(k,70,48,40).map(function(q){return q.join(",");}).join(" ");
+    mh += '<div><svg viewBox="0 0 140 96"><polygon points="'+pp+'" fill="#f1e9fc" stroke="#8a4fd8" stroke-width="3" stroke-linejoin="round"/></svg><b>'+NOMBRES[k]+'</b>'+k+' lados</div>';
+  }
+  document.getElementById("miniPoligonos").innerHTML = mh;
+
+  // Pintar ejercicios
+  function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;"); }
+  document.querySelectorAll(".lista").forEach(function(box){
+    box.innerHTML = U[box.dataset.u].map(function(q,i){
+      var h = '<div class="q" data-u="'+box.dataset.u+'" data-ans="'+esc(q.a)+'" data-ok="'+esc(q.ok)+'" data-hint="'+esc(q.h)+'"'+(q.n?' data-type="num"':'')+'>';
+      h += '<div class="enun"><span class="num">'+(i+1)+'</span>'+q.e+'</div>' + (q.f||'');
+      if (q.n) h += '<div class="numfila"><input type="number" inputmode="numeric" aria-label="Respuesta"> '+(q.u?'<span>'+q.u+'</span> ':'')+'<button class="revisar">Revisar</button></div>';
+      else h += '<div class="ops">' + q.o.map(function(o){ return '<button class="op" data-v="'+esc(o)+'">'+o+'</button>'; }).join("") + '</div>';
+      return h + '<div class="fb"></div></div>';
+    }).join("");
+  });
+
+  // ---------- Explorador de ángulos ----------
+  var rango = document.getElementById("exploraRango"), es = document.getElementById("exploraSvg"), caja = document.getElementById("explora");
+  var TIPOS = {
+    agudo:     {nombre:"Ángulo agudo", color:"#1fa463", ej:"🍕 la punta de un trozo de pizza · ✏️ la punta de un lápiz · ✂️ una tijera poco abierta · 🕐 el reloj a la 1:00"},
+    recto:     {nombre:"Ángulo recto", color:"#2f7de1", ej:"📓 la esquina de un cuaderno · 🚪 la esquina de una puerta · 🕒 el reloj a las 3:00 · la letra L"},
+    obtuso:    {nombre:"Ángulo obtuso", color:"#f07b1d", ej:"💻 un notebook abierto para escribir · 🕓 el reloj a las 4:00 · 🪭 un abanico bien abierto · una silla reclinada"},
+    extendido: {nombre:"Ángulo extendido", color:"#8a4fd8", ej:"🕕 el reloj a las 6:00 · 📖 un libro abierto plano sobre la mesa · 🙆 los brazos estirados hacia los lados"}
+  };
+  function tipoDe(g){ return g < 90 ? "agudo" : g === 90 ? "recto" : g < 180 ? "obtuso" : "extendido"; }
+  function textoDe(g, tp){
+    if (tp === "agudo") return "<p>Mide <b>menos de 90°</b>: es más <b>cerrado</b> que la esquina de una hoja. Es un ángulo \"puntudo\".</p><p>👉 Le faltan <b>" + (90-g) + "°</b> para llegar a ser recto.</p>";
+    if (tp === "recto") return "<p>Mide <b>exactamente 90°</b>: es igual a la esquina de una hoja. Es un cuarto de vuelta. Se marca con un <b>cuadradito</b> ⊡.</p><p>👉 Las dos líneas que lo forman son <b>perpendiculares</b>.</p>";
+    if (tp === "obtuso") return "<p>Mide <b>más de 90° y menos de 180°</b>: es más <b>abierto</b> que la esquina de una hoja, pero todavía no es una línea recta.</p><p>👉 Se pasó <b>" + (g-90) + "°</b> del recto y le faltan <b>" + (180-g) + "°</b> para ser extendido.</p>";
+    return "<p>Mide <b>exactamente 180°</b>: las dos líneas quedaron formando <b>una sola línea recta</b>. Es media vuelta.</p><p>👉 Es lo mismo que <b>dos ángulos rectos juntos</b> (90° + 90° = 180°).</p>";
+  }
+  function dibujarExplorador(g){
+    var tp = tipoDe(g), col = TIPOS[tp].color, vx = 130, vy = 135, Lr = 105, R = 118, h = "";
+    h += '<path d="M'+(vx-R)+' '+vy+' A'+R+' '+R+' 0 0 1 '+(vx+R)+' '+vy+'" fill="#faf6ec" stroke="#e7dfcf" stroke-width="2"/>';
+    for (var d=0; d<=180; d+=10){
+      var a = d*Math.PI/180, r1 = R-(d%30===0?12:6);
+      h += '<line x1="'+(vx+r1*Math.cos(a)).toFixed(1)+'" y1="'+(vy-r1*Math.sin(a)).toFixed(1)+'" x2="'+(vx+R*Math.cos(a)).toFixed(1)+'" y2="'+(vy-R*Math.sin(a)).toFixed(1)+'" stroke="#c9bfa8" stroke-width="2"/>';
+      if (d%30===0) h += '<text x="'+(vx+(R-24)*Math.cos(a)).toFixed(1)+'" y="'+(vy-(R-24)*Math.sin(a)+4).toFixed(1)+'" text-anchor="middle" font-size="10" font-weight="700" fill="#a99f88">'+d+'</text>';
+    }
+    h += '<line x1="'+vx+'" y1="'+vy+'" x2="'+vx+'" y2="'+(vy-R)+'" stroke="#2f7de1" stroke-width="2" stroke-dasharray="4 5" opacity=".45"/>';
+    var rad = g*Math.PI/180, x2 = vx+Lr*Math.cos(rad), y2 = vy-Lr*Math.sin(rad), r = 34;
+    if (tp === "recto") h += '<rect x="'+vx+'" y="'+(vy-22)+'" width="22" height="22" fill="'+col+'33" stroke="'+col+'" stroke-width="3"/>';
+    else h += '<path d="M'+(vx+r)+' '+vy+' A'+r+' '+r+' 0 0 0 '+(vx+r*Math.cos(rad)).toFixed(1)+' '+(vy-r*Math.sin(rad)).toFixed(1)+' L'+vx+' '+vy+'Z" fill="'+col+'33" stroke="'+col+'" stroke-width="3"/>';
+    h += '<line x1="'+vx+'" y1="'+vy+'" x2="'+(vx+Lr)+'" y2="'+vy+'" stroke="#1f2a44" stroke-width="6" stroke-linecap="round"/>';
+    h += '<line x1="'+vx+'" y1="'+vy+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke="#1f2a44" stroke-width="6" stroke-linecap="round"/>';
+    h += '<circle cx="'+vx+'" cy="'+vy+'" r="6" fill="#e0483e"/>';
+    h += '<circle cx="'+x2.toFixed(1)+'" cy="'+y2.toFixed(1)+'" r="13" fill="'+col+'" stroke="#fff" stroke-width="4"/>';
+    h += '<text x="'+(vx+52*Math.cos(rad/2)).toFixed(1)+'" y="'+(vy-52*Math.sin(rad/2)+5).toFixed(1)+'" text-anchor="middle" font-size="15" font-weight="900" fill="'+col+'">'+g+'°</text>';
+    es.innerHTML = h;
+  }
+  function actualizar(g){
+    g = Math.max(1, Math.min(180, Math.round(g)));
+    var tp = tipoDe(g), info = TIPOS[tp];
+    rango.value = g;
+    caja.style.setProperty("--tc", info.color);
+    dibujarExplorador(g);
+    document.getElementById("exploraGrados").textContent = g;
+    document.getElementById("exploraNombre").textContent = info.nombre;
+    var p = Math.min(g,90)/180*100, q = Math.max(g-90,0)/180*100;
+    document.getElementById("exploraTexto").innerHTML =
+      "<h4>" + info.nombre + " · " + g + "°</h4>" + textoDe(g, tp) +
+      '<div class="medidor"><i style="width:'+p+'%;background:'+(g<90?"#1fa463":"#2f7de1")+'"></i><i style="width:'+q+'%;background:'+(g>=180?"#8a4fd8":"#f07b1d")+'"></i></div>' +
+      '<div class="marcas"><span>0°</span><span>90° (recto)</span><span>180° (extendido)</span></div>' +
+      "<p style='margin-top:8px'><b>En la vida real:</b> " + info.ej + "</p>";
+    document.querySelectorAll(".saltos button").forEach(function(b){ b.classList.toggle("activo", tipoDe(+b.dataset.g) === tp); });
+  }
+  var arrastrando = false;
+  function gradosDesde(ev){
+    var pt = es.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var p = pt.matrixTransform(es.getScreenCTM().inverse());
+    var g = Math.atan2(135 - p.y, p.x - 130) * 180 / Math.PI;
+    if (g < 0) g = (p.x >= 130) ? 1 : 180;
+    if (Math.abs(g - 90) <= 3) g = 90;
+    if (g >= 177) g = 180;
+    return g;
+  }
+  es.addEventListener("pointerdown", function(ev){ arrastrando = true; es.setPointerCapture(ev.pointerId); actualizar(gradosDesde(ev)); ev.preventDefault(); });
+  es.addEventListener("pointermove", function(ev){ if (arrastrando) actualizar(gradosDesde(ev)); });
+  es.addEventListener("pointerup", function(){ arrastrando = false; });
+  es.addEventListener("pointercancel", function(){ arrastrando = false; });
+  rango.addEventListener("input", function(){ actualizar(+rango.value); });
+  document.querySelectorAll(".saltos button").forEach(function(b){ b.addEventListener("click", function(){ actualizar(+b.dataset.g); }); });
+  actualizar(45);
+
+  // ---------- Lógica de los ejercicios ----------
+  var preguntas = Array.prototype.slice.call(document.querySelectorAll(".q"));
+  preguntas.forEach(function(q,i){ q.dataset.id = q.dataset.u + "-" + i; });
+  var CLAVE = "ejercicios-figuras-planas-1a4", hechas = {};
+  try { hechas = JSON.parse(localStorage.getItem(CLAVE) || "{}") || {}; } catch(e){ hechas = {}; }
+  function guardar(){ try { localStorage.setItem(CLAVE, JSON.stringify(hechas)); } catch(e){} }
+  function normal(s){ return String(s).trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,""); }
+
+  function mostrar(q, ok, texto){
+    var fb = q.querySelector(".fb");
+    fb.className = "fb on " + (ok ? "ok" : "no");
+    fb.textContent = (ok ? "✅ " : "🤔 Casi… ") + texto;
+  }
+  function marcarHecha(q, silencio){
+    q.classList.add("hecha");
+    if (!hechas[q.dataset.id]) { hechas[q.dataset.id] = 1; guardar(); if (!silencio) festejo(); }
+    progreso();
+  }
+
+  preguntas.forEach(function(q){
+    var ans = normal(q.dataset.ans);
+    if (q.dataset.type === "num") {
+      var inp = q.querySelector("input"), btn = q.querySelector(".revisar");
+      function revisar(){
+        if (inp.value === "") return;
+        if (normal(inp.value) === ans) { inp.style.borderColor = "var(--verde)"; inp.disabled = true; btn.disabled = true; mostrar(q, true, q.dataset.ok); marcarHecha(q); }
+        else { inp.style.borderColor = "var(--rojo)"; mostrar(q, false, q.dataset.hint); }
+      }
+      btn.addEventListener("click", revisar);
+      inp.addEventListener("keydown", function(e){ if (e.key === "Enter") revisar(); });
+      if (hechas[q.dataset.id]) { inp.value = q.dataset.ans; inp.disabled = true; btn.disabled = true; inp.style.borderColor = "var(--verde)"; mostrar(q, true, q.dataset.ok); marcarHecha(q, true); }
+    } else {
+      q.querySelectorAll(".op").forEach(function(b){
+        b.addEventListener("click", function(){
+          if (q.classList.contains("hecha")) return;
+          if (normal(b.dataset.v) === ans) { b.classList.add("bien"); mostrar(q, true, q.dataset.ok); marcarHecha(q); }
+          else { b.classList.remove("mal"); void b.offsetWidth; b.classList.add("mal"); mostrar(q, false, q.dataset.hint); }
+        });
+        if (hechas[q.dataset.id] && normal(b.dataset.v) === ans) { b.classList.add("bien"); mostrar(q, true, q.dataset.ok); marcarHecha(q, true); }
+      });
+    }
+  });
+
+  function progreso(){
+    var n = preguntas.filter(function(q){ return hechas[q.dataset.id]; }).length, tt = preguntas.length;
+    document.getElementById("cuenta").textContent = n;
+    document.getElementById("cuenta2").textContent = n;
+    document.getElementById("total").textContent = tt;
+    document.getElementById("total2").textContent = tt;
+    document.getElementById("barra").style.width = (100*n/tt) + "%";
+    document.querySelectorAll("[data-cnt]").forEach(function(c){
+      var u = c.dataset.cnt, qs = preguntas.filter(function(q){ return q.dataset.u === u; });
+      var h = qs.filter(function(q){ return hechas[q.dataset.id]; }).length;
+      c.textContent = (h === qs.length ? "✅ " : "⭐ ") + h + "/" + qs.length;
+    });
+    var m = document.getElementById("mensajeFinal");
+    if (n === tt) m.textContent = "¡Completaste todos los ejercicios! Eres un experto en figuras planas. 🎉";
+    else if (n >= tt/2) m.textContent = "¡Vas muy bien! Te faltan " + (tt-n) + " ejercicios.";
+    else m.textContent = "Responde todos los ejercicios para completar.";
+  }
+
+  function festejo(){
+    var emojis = ["⭐","✨","🌟"];
+    for (var i=0;i<6;i++){
+      var s = document.createElement("span"); s.className = "confeti";
+      s.textContent = emojis[i%3]; s.style.left = (10 + Math.random()*80) + "vw";
+      s.style.animationDelay = (Math.random()*0.3) + "s";
+      document.body.appendChild(s); setTimeout(function(el){ el.remove(); }, 2200, s);
+    }
+  }
+
+  document.getElementById("reiniciar").addEventListener("click", function(){
+    if (!confirm("¿Borrar todas las respuestas y empezar de nuevo?")) return;
+    hechas = {}; guardar(); location.reload();
+  });
+
+  progreso();
+})();
+</script>
+</body>
+</html>
